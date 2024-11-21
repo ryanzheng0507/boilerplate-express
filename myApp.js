@@ -11,7 +11,7 @@ console.log("Hello World")
 // Handlers take the form function(req, res) {...}, where req is the request object, and res is the response object.
 // Use the app.get() method to serve the string "Hello Express" to GET requests matching the /(root) path.
 app.get('/', (req, res) => {
-  res.send('Hello Express')
+  res.sendFile(__dirname + '/views/index.html')
 })
 
 
