@@ -138,9 +138,28 @@ app.get('/name', (req, res) => {
 // As you can see, the body is encoded like the query string. This is the default format used by HTML forms. With Ajax, you can also use JSON to handle data having a more complex structure. There is also another type of encoding: multipart/form-data. This one is used to upload binary files. In this exercise, you will use a URL encoded body. To parse the data coming from POST requests, you must use the body-parser package. This package allows you to use a series of middleware, which can decode data in different formats.
 // body-parser has already been installed and is in your project's package.json file. require it at the top of the myApp.js file and store it in a variable named bodyParser. The middleware to handle URL encoded data is returned by bodyParser.urlencoded({extended: false}). Pass the function returned by the previous method call to app.use(). As usual, the middleware must be mounted before all the routes that depend on it.
 
+// Note: extended is a configuration option that tells body-parser which parsing needs to be used. When extended=false it uses the classic encoding querystring library. When extended=true it uses qs library for parsing.
+// When using extended=false, values can be only strings or arrays. The object returned when using querystring does not prototypically inherit from the default JavaScript Object, which means functions like hasOwnProperty, toString will not be available. The extended version allows more data flexibility, but it is outmatched by JSON.
+
 app.use(bodyParser.urlencoded({extended: false}));
 
+// Mount a POST handler at the path /name. It’s the same path as before. We have prepared a form in the html frontpage. It will submit the same data of exercise 10 (Query string). If the body-parser is configured correctly, you should find the parameters in the object req.body. Have a look at the usual library example:
+// route: POST '/library'
+// urlencoded_body: userId=546&bookId=6754
+// req.body: {userId: '546', bookId: '6754'}
+// Respond with the same JSON object as before: {name: 'firstname lastname'}. Test if your endpoint works using the html form we provided in the app frontpage.
+// Tip: There are several other http methods other than GET and POST. And by convention there is a correspondence between the http verb, and the operation you are going to execute on the server. The conventional mapping is:
+// POST (sometimes PUT) - Create a new resource using the information sent with the request,
+// GET - Read an existing resource without modifying it,
+// PUT or PATCH (sometimes POST) - Update a resource using the data sent,
+// DELETE - Delete a resource.
+// There are also a couple of other methods which are used to negotiate a connection with the server. Except for GET, all the other methods listed above can have a payload (i.e. the data into the request body). The body-parser middleware works with these methods as well.
 
+app.post('/name', (req, res) => {
+  let firstName = req.body.first
+  let lastName = req.body.last
+  res.json({name: `${firstName} ${lastName}`})
+})
 
 
 
